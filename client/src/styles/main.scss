@@ -1,0 +1,62 @@
+$bg: #f4f1ea;
+$ink: #1d2b2a;
+$accent: #d9822b;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: $bg;
+  color: $ink;
+}
+
+.app {
+  padding: 1rem;
+
+  &__title {
+    color: $accent;
+  }
+}
+
+.map {
+  height: 70vh;
+  border-radius: 8px;
+  border: 2px solid $ink;
+}
+
+.legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 0;
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+
+  &__swatch {
+    display: inline-block;
+    width: 1.5rem;
+    height: 0.35rem;
+    margin-right: 0.4rem;
+    vertical-align: middle;
+
+    &--water {
+      background: #1f78d1;
+    }
+
+    &--power {
+      background: #d62828;
+    }
+
+    &--fibre {
+      background: #7b2cbf;
+    }
+
+    &--dig {
+      background: #d9822b;
+    }
+  }
+}

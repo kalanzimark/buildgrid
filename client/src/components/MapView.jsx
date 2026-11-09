@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { useGetAssetsQuery, useGetDigsQuery } from "../api/digApi";
+import DrawControls from "./DrawControls";
 
 const KAMPALA = [0.3136, 32.5811];
 const ASSET_COLOURS = {
@@ -78,6 +79,8 @@ export default function MapView() {
           attribution="&copy; OpenStreetMap contributors"
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+
+        <DrawControls />
 
         {assets && (
           <GeoJSON

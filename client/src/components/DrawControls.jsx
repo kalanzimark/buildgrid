@@ -25,6 +25,13 @@ export default function DrawControls() {
 
     function handleCreate(e) {
       const feature = e.layer.toGeoJSON();
+      addDig({
+        purpose: "Temporary test dig",
+        start: "2026-12-10",
+        end: "2026-12-12",
+        geometry: feature.geometry,
+      });
+      e.layer.remove();
       console.log("Drawn shape:", feature);
     }
 
@@ -34,7 +41,7 @@ export default function DrawControls() {
       map.off("pm:create", handleCreate);
       map.pm.removeControls();
     };
-  }, [map]);
+  }, [map, addDig]);
 
   return null;
 }

@@ -4,9 +4,8 @@ import "@geoman-io/leaflet-geoman-free";
 import "@geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css";
 import { useAddDigMutation } from "../api/digApi";
 
-export default function DrawControls() {
+export default function DrawControls({ onShapeDrawn }) {
   const map = useMap();
-  const [addDig] = useAddDigMutation();
 
   useEffect(() => {
     map.pm.addControls({
@@ -25,12 +24,7 @@ export default function DrawControls() {
 
     function handleCreate(e) {
       const feature = e.layer.toGeoJSON();
-      addDig({
-        purpose: "Temporary test dig",
-        start: "2026-12-10",
-        end: "2026-12-12",
-        geometry: feature.geometry,
-      });
+      onShapeDrawn(feature.geometry);
       e.layer.remove();
       console.log("Drawn shape:", feature);
     }
@@ -41,7 +35,7 @@ export default function DrawControls() {
       map.off("pm:create", handleCreate);
       map.pm.removeControls();
     };
-  }, [map, addDig]);
+  }, [map, onShapeDrawn]);
 
   return null;
 }

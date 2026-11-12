@@ -1,8 +1,14 @@
+import { useState } from "react";
 import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
-import { useGetAssetsQuery, useGetDigsQuery } from "../api/digApi";
+import {
+  useGetAssetsQuery,
+  useGetDigsQuery,
+  useAddDigMutation,
+} from "../api/digApi";
 import DrawControls from "./DrawControls";
+import DigForm from "./DigForm";
 
 const KAMPALA = [0.3136, 32.5811];
 const ASSET_COLOURS = {
@@ -58,16 +64,26 @@ function digPopup(feature, layer) {
   );
 }
 export default function MapView() {
+  const [draft, setDraft] = useState(null);
+  const [addDig, { error, reset }] = useAddDigMutation();
+
   const {
     data: assets,
     error: assetsError,
     fulfilledTimeStamp: assetsTime,
   } = useGetAssetsQuery();
+
   const {
     data: digs,
     error: digsError,
     fulfilledTimeStamp: digsTime,
   } = useGetDigsQuery();
+
+  async function handleSave(values) {
+    const result = await addDig({ ...values, geometry: draft });
+    if (!result.error) setDraft(null);
+  }
+
   return (
     <>
       {(assetsError || digsError) && (
@@ -80,7 +96,7 @@ export default function MapView() {
           url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        <DrawControls />
+        <DrawControls onShapeDrawn={setDraft} />
 
         {assets && (
           <GeoJSON
@@ -91,6 +107,7 @@ export default function MapView() {
             onEachFeature={assetPopup}
           />
         )}
+
         {digs && (
           <GeoJSON
             key={digsTime}
@@ -99,7 +116,30 @@ export default function MapView() {
             onEachFeature={digPopup}
           />
         )}
+
+        {draft && (
+          <GeoJSON
+            key={JSON.stringify(draft)}
+            data={draft}
+            style={{ color: "#2a9d8f", weight: 4, dashArray: "4 6" }}
+          />
+        )}
       </MapContainer>
+
+      {draft && (
+        <DigForm
+          onFormSubmit={handleSave}
+          onCancel={() => {
+            setDraft(null);
+            reset();
+          }}
+        />
+      )}
+      {error && (
+        <p className="dig-form__error">
+          {error.data?.error || "Could not save the dig"}
+        </p>
+      )}
 
       <ul className="legend">
         <li>

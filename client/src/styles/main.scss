@@ -60,3 +60,39 @@ body {
     }
   }
 }
+
+
+.dig-form {
+  max-width: 420px;
+  margin: 1rem auto;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+
+  label {
+    display: block;
+    margin-top: 0.75rem;
+    font-weight: 600;
+  }
+
+  input {
+    display: block;
+    width: 100%;
+    margin-top: 0.25rem;
+    padding: 0.4rem;
+    box-sizing: border-box;
+  }
+
+  &__error {
+    margin: 0.25rem 0 0;
+    color: #d62828;
+    font-size: 0.9rem;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+}
